@@ -25,13 +25,14 @@ model GameSession {
   player   Player @relation(fields: [playerId], references: [playerId])
 
   breakpointId Int
-  breakpoint Breakpoint @relation(fields: [breakpointId], references: [breakpointId])
+  breakpoint   Breakpoint @relation(fields: [breakpointId], references: [breakpointId])
 
   playerProgress GameProgress[]
 }
 
 model Image {
   imageId     Int    @id @default(autoincrement())
+  name        String @unique
   description String
 
   level Level?
@@ -41,6 +42,7 @@ model Image {
 
 model Character {
   characterId Int    @id @default(autoincrement())
+  name        String
   description String
 
   imageId Int
@@ -51,12 +53,12 @@ model Character {
 
 model CharacterLocation {
   characterLocationId Int @id @default(autoincrement())
-  
+
   characterId Int
-  character Character @relation(fields: [characterId], references: [characterId])
+  character   Character @relation(fields: [characterId], references: [characterId])
 
   breakpointId Int
-  breakpoint Breakpoint @relation(fields: [breakpointId], references: [breakpointId])
+  breakpoint   Breakpoint @relation(fields: [breakpointId], references: [breakpointId])
 
   xMin Float
   xMax Float
@@ -73,6 +75,8 @@ model Level {
   image   Image @relation(fields: [imageId], references: [imageId])
 
   playedBy GameProgress[]
+
+  markers Marker[]
 }
 
 model Breakpoint {
@@ -89,11 +93,14 @@ model Breakpoint {
 
 model Marker {
   markerId Int @id @default(autoincrement())
-  height Int
-  width Int
+  height   Int
+  width    Int
 
-  breakpointId Int @unique
-  breakpoint Breakpoint @relation(fields: [breakpointId], references: [breakpointId])
+  breakpointId Int        @unique
+  breakpoint   Breakpoint @relation(fields: [breakpointId], references: [breakpointId])
+
+  levelId Int
+  level Level @relation(fields: [levelId], references: [levelId])
 }
 
 model GameProgress {
