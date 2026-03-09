@@ -4,6 +4,7 @@
     "description": "",
     "main": "app.ts",
     "scripts": {
+        "dev": "tsx --watch app.ts",
         "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --setupFiles dotenv/config"
     },
     "repository": {
@@ -18,21 +19,21 @@
         "@prisma/adapter-pg": "^7.2.0",
         "@prisma/client": "^7.2.0",
         "@stylistic/eslint-plugin": "^5.9.0",
+        "cookie-parser": "^1.4.7",
+        "cors": "^2.8.6",
         "dotenv": "^17.2.3",
         "express": "^5.2.1",
         "express-validator": "^7.3.1",
-        "pg": "^8.16.3",
-        "cookie-parser": "^1.4.7",
-        "cors": "^2.8.6"
+        "pg": "^8.16.3"
     },
     "devDependencies": {
         "@eslint/js": "^9.39.3",
         "@jest/globals": "^30.2.0",
-        "@types/express": "^5.0.6",
         "@types/cookie-parser": "^1.4.10",
         "@types/cors": "^2.8.19",
-        "@types/supertest": "^7.2.0",
+        "@types/express": "^5.0.6",
         "@types/pg": "^8.16.0",
+        "@types/supertest": "^7.2.0",
         "eslint": "^9.39.3",
         "globals": "^17.3.0",
         "jest": "^30.2.0",
@@ -40,7 +41,8 @@
         "supertest": "^7.2.2",
         "ts-jest": "^29.4.6",
         "tsx": "^4.21.0",
-        "typescript": "^5.9.3"
+        "typescript": "^5.9.3",
+        "typescript-eslint": "^8.56.1"
     },
     "bugs": {
         "url": "https://github.com/Dur4nt3/waldo_project_back/issues"
