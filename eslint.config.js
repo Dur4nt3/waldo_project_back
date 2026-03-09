@@ -1,5 +1,6 @@
 import { defineConfig, globalIgnores } from 'eslint/config';
 import globals from 'globals';
+import { parser } from 'typescript-eslint';
 import js from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
 
@@ -9,6 +10,7 @@ export default defineConfig([
         files: ['**/*.{js,jsx,ts}'],
         extends: [js.configs.recommended],
         languageOptions: {
+            parser,
             ecmaVersion: 2020,
             globals: globals.node,
             parserOptions: {

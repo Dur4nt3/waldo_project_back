@@ -10,7 +10,7 @@ datasource db {
 model Player {
   playerId Int    @id @default(autoincrement())
   name     String @unique
-  score    Int
+  score    Int?
 
   gameSession GameSession?
 }
@@ -73,7 +73,7 @@ model CharacterLocation {
 
 model Level {
   levelId    Int @id @default(autoincrement())
-  orderIndex Int @unique
+  orderIndex Int? @unique
 
   imageId Int   @unique
   image   Image @relation(fields: [imageId], references: [imageId])
