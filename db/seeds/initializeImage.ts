@@ -1,12 +1,23 @@
-import { prisma } from "../../lib/prisma";
+import { prisma } from '../../lib/prisma';
 
-async function main() {
+export default async function initializeImage() {
     try {
         await prisma.image.createMany({
             data: [
-                { name: 'rick-morty', description: 'Rick and Morty image, find Pencilvester and Summer.' },
-                { name: 'breaking-bad', description: 'Breaking Bad image, find Walter White and Saul Goodman.' },
-                { name: 'one-piece', description: 'One Piece image, find Luffy and Wally.' }
+                {
+                    name: 'rick-morty',
+                    description:
+                        'Rick and Morty image, find Pencilvester and Summer.',
+                },
+                {
+                    name: 'breaking-bad',
+                    description:
+                        'Breaking Bad image, find Walter White and Saul Goodman.',
+                },
+                {
+                    name: 'one-piece',
+                    description: 'One Piece image, find Luffy and Wally.',
+                },
             ],
             skipDuplicates: true,
         });
@@ -22,13 +33,3 @@ async function main() {
         );
     }
 }
-
-main()
-    .then(async () => {
-        await prisma.$disconnect();
-    })
-    .catch(async (e) => {
-        console.error(e);
-        await prisma.$disconnect();
-        process.exit(1);
-    });

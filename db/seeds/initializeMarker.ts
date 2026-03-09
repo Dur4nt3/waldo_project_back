@@ -1,6 +1,6 @@
 import { prisma } from '../../lib/prisma';
 
-async function main() {
+export default async function initializeMarker() {
     try {
         await prisma.marker.createMany({
             data: [
@@ -24,6 +24,7 @@ async function main() {
                 { height: 22, width: 22, breakpointId: 5, levelId: 2 },
                 { height: 18, width: 18, breakpointId: 5, levelId: 3 },
             ],
+            skipDuplicates: true,
         });
 
         console.log('Markers seeded successfully!');
@@ -38,12 +39,4 @@ async function main() {
     }
 }
 
-main()
-    .then(async () => {
-        await prisma.$disconnect();
-    })
-    .catch(async (e) => {
-        console.error(e);
-        await prisma.$disconnect();
-        process.exit(1);
-    });
+

@@ -1,6 +1,6 @@
 import { prisma } from '../../lib/prisma';
 
-async function main() {
+export default async function initializeCharacterLocation() {
     try {
         await prisma.characterLocation.createMany({
             data: [
@@ -250,6 +250,7 @@ async function main() {
                     yMax: 0.8390145767334336,
                 },
             ],
+            skipDuplicates: true,
         });
 
         console.log('Character locations seeded successfully!');
@@ -263,13 +264,3 @@ async function main() {
         );
     }
 }
-
-main()
-    .then(async () => {
-        await prisma.$disconnect();
-    })
-    .catch(async (e) => {
-        console.error(e);
-        await prisma.$disconnect();
-        process.exit(1);
-    });
