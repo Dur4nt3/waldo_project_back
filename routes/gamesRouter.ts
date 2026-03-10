@@ -4,21 +4,21 @@ import { controllerGetSession, controllerGetCurrentLevel } from '../controllers/
 import { controllerPostGame } from '../controllers/game/gameControllersPost';
 
 // eslint-disable-next-line new-cap
-const gameRouter = Router();
+const gamesRouter = Router();
 
 // Start session
-gameRouter.post('/', controllerPostGame);
+gamesRouter.post('/sessions', controllerPostGame);
 
 // Check session
-gameRouter.get('/session', controllerGetSession);
+gamesRouter.get('/sessions/current', controllerGetSession);
 
 // Get current level
-gameRouter.get('/', controllerGetCurrentLevel);
+gamesRouter.get('/sessions/current/progress', controllerGetCurrentLevel);
 
 // Submit level
-// gameRouter.post('/answers');
+// gamesRouter.post('/sessions/current/answer');
 
 // Delete session
-// gameRouter.delete('/sessions')
+// gamesRouter.delete('/sessions/current')
 
-export default gameRouter;
+export default gamesRouter;
