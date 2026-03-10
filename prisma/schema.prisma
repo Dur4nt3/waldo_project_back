@@ -18,7 +18,7 @@ model Player {
 model GameSession {
   gameSessionId Int      @id @default(autoincrement())
   createdAt     DateTime @default(now())
-  sessionToken  String
+  sessionToken  String   @unique
   levelCount    Int
 
   playerId Int    @unique
@@ -72,7 +72,7 @@ model CharacterLocation {
 }
 
 model Level {
-  levelId    Int @id @default(autoincrement())
+  levelId    Int  @id @default(autoincrement())
   orderIndex Int? @unique
 
   imageId Int   @unique

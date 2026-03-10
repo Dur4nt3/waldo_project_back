@@ -5,14 +5,15 @@ import { matchedData, validationResult } from 'express-validator';
 import validateName from '../utilities/validateName';
 import validateScreenWidth from '../utilities/validateScreenWidth';
 
-import generateSessionToken from '../utilities/generateSessionToken';
+import { generateSessionToken } from '../utilities/sessionTokenUtilities';
 
 import {
     insertPlayer,
     getBreakpoint,
     getLevelCount,
-    insertGameSession,
 } from '../../db/queries/gameQueries';
+
+import { insertGameSession } from '../../db/queries/sessionManagementQueries';
 
 import { error500 } from '../utilities/serverResponses';
 

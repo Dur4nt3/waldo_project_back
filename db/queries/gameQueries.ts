@@ -1,5 +1,8 @@
 import { prisma } from '../../lib/prisma';
 
+import type GameSessionWithProgress from '../../types/GameSessionWithProgress';
+import { includeProgressData } from '../utilities/includeConfig';
+
 // ------------ SELECT QUERIES ------------
 
 export async function getBreakpoint(screenWidth: number) {
@@ -51,6 +54,29 @@ export async function getLevelCount() {
     }
 }
 
+export async function getCurrentProgress(
+    sessionHash: string,
+): Promise<GameSessionWithProgress | null> {
+    try {
+        const progress = await prisma.gameSession.findUnique({
+            where: {
+                sessionToken: sessionHash,
+            },
+            include: includeProgressData,
+        });
+
+        return progress;
+    } catch (error) {
+        console.error('------------------Logged Error------------------\n');
+        console.error(
+            'Error occurred when attempting to get current progress\n',
+        );
+        console.error(error, '\n');
+        console.error('------------------Logged Error------------------\n');
+        return null;
+    }
+}
+
 // ------------ SELECT QUERIES ------------
 
 // ------------ INSERT QUERIES ------------
@@ -67,32 +93,6 @@ export async function insertPlayer(name: string) {
     } catch (error) {
         console.error('------------------Logged Error------------------\n');
         console.error('Error occurred when attempting to insert player\n');
-        console.error(error, '\n');
-        console.error('------------------Logged Error------------------\n');
-        return null;
-    }
-}
-
-export async function insertGameSession(
-    sessionHash: string,
-    levelCount: number,
-    playerId: number,
-    breakpointId: number,
-) {
-    try {
-        const session = await prisma.gameSession.create({
-            data: {
-                sessionToken: sessionHash,
-                levelCount,
-                playerId,
-                breakpointId,
-            },
-        });
-
-        return session;
-    } catch (error) {
-        console.error('------------------Logged Error------------------\n');
-        console.error('Error occurred when attempting to insert session\n');
         console.error(error, '\n');
         console.error('------------------Logged Error------------------\n');
         return null;

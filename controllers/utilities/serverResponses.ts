@@ -6,3 +6,10 @@ export function error500(res: Response) {
         message: 'Internal server error!',
     });
 }
+
+export function error401(res: Response) {
+    return res.status(401).json({
+        success: false,
+        message: 'Could not validate session!',
+    });
+}
