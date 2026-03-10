@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { controllerGetSession } from '../controllers/game/gameControllersGet';
+import { controllerGetSession, controllerGetCurrentLevel } from '../controllers/game/gameControllersGet';
 import { controllerPostGame } from '../controllers/game/gameControllersPost';
 
 // eslint-disable-next-line new-cap
@@ -13,7 +13,7 @@ gameRouter.post('/', controllerPostGame);
 gameRouter.get('/session', controllerGetSession);
 
 // Get current level
-// gameRouter.get('/');
+gameRouter.get('/', controllerGetCurrentLevel);
 
 // Submit level
 // gameRouter.post('/answers');

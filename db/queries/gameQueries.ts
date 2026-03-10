@@ -77,6 +77,24 @@ export async function getCurrentProgress(
     }
 }
 
+export async function getLevelByOrderIndex(orderIndex: number) {
+    try {
+        const level = await prisma.level.findUnique({
+            where: {
+                orderIndex,
+            },
+        });
+
+        return level;
+    } catch (error) {
+        console.error('------------------Logged Error------------------\n');
+        console.error('Error occurred when attempting to get level\n');
+        console.error(error, '\n');
+        console.error('------------------Logged Error------------------\n');
+        return null;
+    }
+}
+
 // ------------ SELECT QUERIES ------------
 
 // ------------ INSERT QUERIES ------------

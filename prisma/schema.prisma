@@ -119,5 +119,5 @@ model GameProgress {
   sessionOwner  GameSession @relation(fields: [gameSessionId], references: [gameSessionId])
 
   startedAt  DateTime @default(now())
-  finishedAt DateTime
+  finishedAt DateTime?
 }

@@ -8,6 +8,9 @@ export async function getGameSession(sessionHash: string) {
             where: {
                 sessionToken: sessionHash,
             },
+            include: {
+                player: true,
+            },
         });
 
         return session;

@@ -13,3 +13,10 @@ export function error401(res: Response) {
         message: 'Could not validate session!',
     });
 }
+
+export function error403(res: Response) {
+    return res.status(403).json({
+        success: false,
+        message: 'You are not allowed to perform this action',
+    });
+}

@@ -1,7 +1,11 @@
 const includeProgressData = {
     playerProgress: {
         include: {
-            level: true,
+            level: {
+                include: {
+                    image: true,
+                },
+            },
         },
     },
 };
