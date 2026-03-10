@@ -1,5 +1,7 @@
 import { prisma } from '../../lib/prisma';
 
+import logError from '../utilities/logError';
+
 // ------------ SELECT QUERIES ------------
 
 export async function getGameSession(sessionHash: string) {
@@ -10,15 +12,13 @@ export async function getGameSession(sessionHash: string) {
             },
             include: {
                 player: true,
+                breakpoint: true,
             },
         });
 
         return session;
     } catch (error) {
-        console.error('------------------Logged Error------------------\n');
-        console.error('Error occurred when attempting to find session\n');
-        console.error(error, '\n');
-        console.error('------------------Logged Error------------------\n');
+        logError('Error occurred when attempting to find session', error);
         return null;
     }
 }
@@ -45,10 +45,7 @@ export async function insertGameSession(
 
         return session;
     } catch (error) {
-        console.error('------------------Logged Error------------------\n');
-        console.error('Error occurred when attempting to insert session\n');
-        console.error(error, '\n');
-        console.error('------------------Logged Error------------------\n');
+        logError('Error occurred when attempting to insert session', error);
         return null;
     }
 }

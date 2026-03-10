@@ -1,5 +1,7 @@
 import { prisma } from '../../lib/prisma';
 
+import logError from '../utilities/logError';
+
 import type GameSessionWithProgress from '../../types/GameSessionWithProgress';
 import { includeProgressData } from '../utilities/includeConfig';
 
@@ -26,10 +28,7 @@ export async function getBreakpoint(screenWidth: number) {
 
         return breakpoint;
     } catch (error) {
-        console.error('------------------Logged Error------------------\n');
-        console.error('Error occurred when attempting to find breakpoint\n');
-        console.error(error, '\n');
-        console.error('------------------Logged Error------------------\n');
+        logError('Error occurred when attempting to find breakpoint', error);
         return null;
     }
 }
@@ -46,10 +45,7 @@ export async function getLevelCount() {
 
         return levelCount;
     } catch (error) {
-        console.error('------------------Logged Error------------------\n');
-        console.error('Error occurred when attempting to get level count\n');
-        console.error(error, '\n');
-        console.error('------------------Logged Error------------------\n');
+        logError('Error occurred when attempting to get level count', error);
         return null;
     }
 }
@@ -67,30 +63,64 @@ export async function getCurrentProgress(
 
         return progress;
     } catch (error) {
-        console.error('------------------Logged Error------------------\n');
-        console.error(
-            'Error occurred when attempting to get current progress\n',
+        logError(
+            'Error occurred when attempting to get current progress',
+            error,
         );
-        console.error(error, '\n');
-        console.error('------------------Logged Error------------------\n');
         return null;
     }
 }
 
-export async function getLevelByOrderIndex(orderIndex: number) {
+// Returns the levelId, imageId, marker width, marker height and character data
+// For a specific orderIndex and breakpointId
+export async function getAllLevelData(
+    orderIndex: number,
+    breakpointId: number,
+) {
     try {
-        const level = await prisma.level.findUnique({
+        const levelImage = await prisma.level.findUnique({
             where: {
                 orderIndex,
             },
+            select: {
+                levelId: true,
+                imageId: true,
+            },
         });
 
-        return level;
+        if (levelImage === null) {
+            return null;
+        }
+
+        const { imageId, levelId } = levelImage;
+
+        const [markerSize, characters] = await Promise.all([
+            prisma.marker.findUnique({
+                where: {
+                    unique_marker_per_level_and_breakpoint: {
+                        breakpointId,
+                        levelId,
+                    },
+                },
+                select: {
+                    width: true,
+                    height: true,
+                },
+            }),
+            prisma.character.findMany({
+                where: {
+                    imageId,
+                },
+            }),
+        ]);
+
+        if (markerSize === null || characters.length === 0) {
+            return null;
+        }
+
+        return { levelId, imageId, markerSize, characters };
     } catch (error) {
-        console.error('------------------Logged Error------------------\n');
-        console.error('Error occurred when attempting to get level\n');
-        console.error(error, '\n');
-        console.error('------------------Logged Error------------------\n');
+        logError('Error occurred when attempting to get level data', error);
         return null;
     }
 }
@@ -109,10 +139,7 @@ export async function insertPlayer(name: string) {
 
         return player;
     } catch (error) {
-        console.error('------------------Logged Error------------------\n');
-        console.error('Error occurred when attempting to insert player\n');
-        console.error(error, '\n');
-        console.error('------------------Logged Error------------------\n');
+        logError('Error occurred when attempting to insert player', error);
         return null;
     }
 }
