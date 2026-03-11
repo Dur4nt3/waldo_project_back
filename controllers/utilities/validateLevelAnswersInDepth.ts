@@ -5,7 +5,6 @@ import {
     getCharacterCountInLevel,
     isCharacterInLevel,
 } from '../../db/queries/gameQueries';
-import { error400, error500 } from './serverResponses';
 
 export default async function validateLevelAnswersInDepth(
     res: Response,
@@ -16,8 +15,7 @@ export default async function validateLevelAnswersInDepth(
     const levelOrderIndex = await getOrderIndexByLevelId(levelId);
 
     if (levelOrderIndex === null || levelOrderIndex > session.levelCount) {
-        error500(res)
-        return false;
+        return { status: 500, message: 'Internal server error!' };
     }
 
     const characterIdCheck = locations.map((location: any) =>
@@ -31,15 +29,16 @@ export default async function validateLevelAnswersInDepth(
     );
 
     if (allCharactersValid) {
-        error400(res, 'Invalid character IDs!');
-        return false;
+        return { status: 400, message: 'Invalid character IDs!' };
     }
 
     const characterCount = await getCharacterCountInLevel(levelId);
 
     if (characterCount !== locations.length) {
-        error400(res, 'Character count does not match the current level!');
-        return false;
+        return {
+            status: 400,
+            message: 'Character count does not match the current level!',
+        };
     }
 
     return true;

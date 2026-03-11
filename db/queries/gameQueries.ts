@@ -264,3 +264,28 @@ export async function insertPlayer(name: string) {
 }
 
 // ------------ INSERT QUERIES ------------
+
+// ------------ UPDATE QUERIES ------------
+
+export async function completeLevel(gameSessionId: number, levelId: number) {
+    try {
+        await prisma.gameProgress.update({
+            where: {
+                unique_individual_level_progress_per_session: {
+                    gameSessionId,
+                    levelId,
+                },
+            },
+            data: {
+                finishedAt: new Date(),
+            },
+        });
+
+        return true;
+    } catch (error) {
+        logError('Error occurred when attempting to update progress', error);
+        return false;
+    }
+}
+
+// ------------ UPDATE QUERIES ------------

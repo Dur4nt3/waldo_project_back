@@ -5,7 +5,9 @@ import { matchedData, validationResult } from 'express-validator';
 import validateName from '../utilities/validateName';
 import validateScreenWidth from '../utilities/validateScreenWidth';
 import validateLevelAnswersInitial from '../utilities/validateLevelAnswersInitial';
+
 import validateLevelAnswersInDepth from '../utilities/validateLevelAnswersInDepth';
+import validateLevelAnswersCoordinates from '../utilities/validateLevelAnswersCoordinates';
 
 import { generateSessionToken } from '../utilities/sessionTokenUtilities';
 
@@ -13,11 +15,12 @@ import {
     insertPlayer,
     getBreakpoint,
     getLevelCount,
+    completeLevel,
 } from '../../db/queries/gameQueries';
 
 import { insertGameSession } from '../../db/queries/sessionManagementQueries';
 
-import { error500, error401 } from '../utilities/serverResponses';
+import { error500, error401, errorCustom } from '../utilities/serverResponses';
 
 const controllerPostGame: any[] = [
     [...validateName, ...validateScreenWidth],
@@ -100,9 +103,33 @@ const controllerPostAnswer: any[] = [
         );
 
         if (inDepthCheck !== true) {
-            // Error response handled by utility function
-            return;
+            return errorCustom(res, inDepthCheck.status, inDepthCheck.message);
         }
+
+        const coordinateCheck = await validateLevelAnswersCoordinates(
+            session.breakpointId,
+            locations,
+        );
+
+        if (coordinateCheck !== true) {
+            return res.status(400).json({
+                success: false,
+                invalidIds: coordinateCheck,
+            });
+        }
+
+        const completionSuccessful = await completeLevel(
+            session.gameSessionId,
+            levelId,
+        );
+
+        if (!completionSuccessful) {
+            return error500(res);
+        }
+
+        return res.json({
+            success: true,
+        });
     },
 ];
 

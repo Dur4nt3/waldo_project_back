@@ -1,5 +1,16 @@
 import type { Response } from 'express';
 
+export function errorCustom(
+    res: Response,
+    statusCode: number,
+    message: string,
+) {
+    return res.status(statusCode).json({
+        success: false,
+        message,
+    });
+}
+
 export function error400(res: Response, message: string) {
     return res.status(400).json({
         success: false,

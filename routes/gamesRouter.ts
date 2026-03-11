@@ -20,7 +20,7 @@ gamesRouter.get('/sessions/current/levels', controllerGetCurrentLevel);
 // Start a new level
 // gamesRouter.post('/sessions/current/levels',)
 
-// Submit level
+// Submit level answers
 // gamesRouter.post('/sessions/current/answer', validateSessionMiddleware);
 
 // Delete session
