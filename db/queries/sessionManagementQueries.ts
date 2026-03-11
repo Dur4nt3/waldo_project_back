@@ -1,19 +1,22 @@
 import { prisma } from '../../lib/prisma';
 
+import { includeMiscSessionData } from '../utilities/includeConfig';
+
+import type GameSessionWithMiscData from '../../types/GameSessionWithMiscData';
+
 import logError from '../utilities/logError';
 
 // ------------ SELECT QUERIES ------------
 
-export async function getGameSession(sessionHash: string) {
+export async function getGameSession(
+    sessionHash: string,
+): Promise<GameSessionWithMiscData | null> {
     try {
         const session = await prisma.gameSession.findUnique({
             where: {
                 sessionToken: sessionHash,
             },
-            include: {
-                player: true,
-                breakpoint: true,
-            },
+            include: includeMiscSessionData,
         });
 
         return session;

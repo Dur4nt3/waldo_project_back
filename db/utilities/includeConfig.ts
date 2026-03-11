@@ -10,4 +10,9 @@ const includeProgressData = {
     },
 };
 
-export { includeProgressData };
+const includeMiscSessionData = {
+    player: true,
+    breakpoint: true,
+};
+
+export { includeProgressData, includeMiscSessionData };

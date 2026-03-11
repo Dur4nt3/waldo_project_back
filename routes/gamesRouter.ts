@@ -1,5 +1,7 @@
 import { Router } from 'express';
 
+import validateSessionMiddleware from '../controllers/utilities/validateSessionMiddleware';
+
 import { controllerGetSession, controllerGetCurrentLevel } from '../controllers/game/gameControllersGet';
 import { controllerPostGame } from '../controllers/game/gameControllersPost';
 
@@ -10,15 +12,18 @@ const gamesRouter = Router();
 gamesRouter.post('/sessions', controllerPostGame);
 
 // Check session
-gamesRouter.get('/sessions/current', controllerGetSession);
+gamesRouter.get('/sessions/current', validateSessionMiddleware, controllerGetSession);
 
 // Get current level
-gamesRouter.get('/sessions/current/progress', controllerGetCurrentLevel);
+gamesRouter.get('/sessions/current/levels', controllerGetCurrentLevel);
+
+// Start a new level
+// gamesRouter.post('/sessions/current/levels',)
 
 // Submit level
-// gamesRouter.post('/sessions/current/answer');
+// gamesRouter.post('/sessions/current/answer', validateSessionMiddleware);
 
 // Delete session
-// gamesRouter.delete('/sessions/current')
+// gamesRouter.delete('/sessions/current',)
 
 export default gamesRouter;
