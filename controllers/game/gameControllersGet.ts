@@ -2,7 +2,7 @@ import type { Request, Response } from 'express';
 
 import { error401, error403, error500 } from '../utilities/serverResponses';
 
-import { getCurrentProgress } from '../../db/queries/gameQueries';
+import { getCurrentProgress } from '../../db/queries/progressQueries';
 
 import getPlayerCurrentLevel from '../utilities/getPlayerCurrentLevel';
 

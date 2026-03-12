@@ -1,10 +1,11 @@
 import type { Response } from 'express';
 
+import { getOrderIndexByLevelId } from '../../db/queries/levelQueries';
+
 import {
-    getOrderIndexByLevelId,
     getCharacterCountInLevel,
     isCharacterInLevel,
-} from '../../db/queries/gameQueries';
+} from '../../db/queries/characterQueries';
 
 export default async function validateLevelAnswersInDepth(
     res: Response,

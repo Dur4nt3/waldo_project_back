@@ -4,6 +4,6 @@ import { Router } from 'express';
 const playersRouter = Router();
 
 // Create score
-// playersRouter.post('/scores')
+playersRouter.post('/scores', (req, res) => res.json({ msg: 'WIP' }));
 
 export default playersRouter;

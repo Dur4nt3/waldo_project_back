@@ -10,17 +10,90 @@ import validateLevelAnswersInDepth from '../utilities/validateLevelAnswersInDept
 import validateLevelAnswersCoordinates from '../utilities/validateLevelAnswersCoordinates';
 
 import { generateSessionToken } from '../utilities/sessionTokenUtilities';
+import getPlayerCurrentLevel from '../utilities/getPlayerCurrentLevel';
 
+import { insertPlayer, getBreakpoint } from '../../db/queries/miscGameQueries';
 import {
-    insertPlayer,
-    getBreakpoint,
     getLevelCount,
+    getLevelByOrderIndex,
+} from '../../db/queries/levelQueries';
+import {
+    getCurrentProgress,
+    startLevel,
     completeLevel,
-} from '../../db/queries/gameQueries';
-
+} from '../../db/queries/progressQueries';
 import { insertGameSession } from '../../db/queries/sessionManagementQueries';
 
-import { error500, error401, errorCustom } from '../utilities/serverResponses';
+import {
+    error500,
+    error401,
+    errorCustom,
+    error403,
+} from '../utilities/serverResponses';
+
+export async function controllerPostNewLevel(req: Request, res: Response) {
+    const session = req.gameSession;
+
+    if (!session) {
+        return error401(res);
+    }
+
+    const currentProgress = await getCurrentProgress(session.sessionToken);
+
+    if (currentProgress === null) {
+        return error500(res);
+    }
+
+    let completedLevels = 0;
+    let currentLevel = null;
+
+    for (const levelProgress of currentProgress.playerProgress) {
+        const { startedAt, finishedAt, level } = levelProgress;
+
+        if (startedAt !== null && finishedAt !== null) {
+            completedLevels += 1;
+        }
+
+        if (startedAt !== null && finishedAt === null) {
+            currentLevel = level.orderIndex;
+        }
+    }
+
+    if (currentLevel !== null || completedLevels === session.levelCount) {
+        if (completedLevels === session.levelCount) {
+            return res.status(403).json({
+                success: false,
+                eligibleForScore: true,
+            });
+        }
+
+        return error403(res);
+    }
+
+    const nextLevelOrderIndex = completedLevels + 1;
+
+    const nextLevel = await getLevelByOrderIndex(nextLevelOrderIndex);
+
+    if (!nextLevel) {
+        return error500(res);
+    }
+
+    const startSuccessful = await startLevel(
+        nextLevel.levelId,
+        session.gameSessionId,
+    );
+
+    if (!startSuccessful) {
+        return error500(res);
+    }
+
+    const currentLevelData = await getPlayerCurrentLevel(currentProgress);
+
+    return res.json({
+        success: true,
+        progress: currentLevelData,
+    });
+}
 
 const controllerPostGame: any[] = [
     [...validateName, ...validateScreenWidth],

@@ -1,6 +1,4 @@
-import type { Response } from 'express';
-
-import { isCharacterLocationValid } from '../../db/queries/gameQueries';
+import { isCharacterLocationValid } from '../../db/queries/characterQueries';
 
 export default async function validateLevelAnswersCoordinates(
     breakpointId: number,

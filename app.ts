@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
 import gamesRouter from './routes/gamesRouter';
+import playersRouter from './routes/playersRouter';
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/games', gamesRouter);
+app.use('/players', playersRouter);
 
 // eslint-disable-next-line no-unused-vars
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {

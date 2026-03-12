@@ -1,4 +1,4 @@
-import { getAllLevelData } from '../../db/queries/gameQueries';
+import { getAllLevelData } from '../../db/queries/levelQueries';
 
 import type GameSessionWithProgress from '../../types/GameSessionWithProgress';
 
@@ -14,30 +14,21 @@ export default async function getPlayerCurrentLevel(
     let currentLevel = null;
 
     for (const levelProgress of currentProgress.playerProgress) {
-        if (
-            levelProgress.startedAt !== null &&
-            levelProgress.finishedAt !== null
-        ) {
+        const { startedAt, finishedAt, level } = levelProgress;
+
+        if (startedAt !== null && finishedAt !== null) {
             completedLevels += 1;
         }
 
-        if (
-            levelProgress.startedAt !== null &&
-            levelProgress.finishedAt === null
-        ) {
-            currentLevel = levelProgress.level.orderIndex;
+        if (startedAt !== null && finishedAt === null) {
+            currentLevel = level.orderIndex;
         }
     }
 
-    if (currentLevel === null) {
-        const nextLevel = completedLevels + 1;
-        if (nextLevel <= currentProgress.levelCount) {
-            currentLevel = await getAllLevelData(
-                nextLevel,
-                currentProgress.breakpointId,
-            );
-        }
-    } else {
+    // If currentLevel is null
+    // The player still hasn't started the next level
+    // Return null to indicate such
+    if (currentLevel !== null) {
         currentLevel = await getAllLevelData(
             currentLevel,
             currentProgress.breakpointId,
