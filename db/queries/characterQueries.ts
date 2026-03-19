@@ -82,12 +82,6 @@ export async function isCharacterLocationValid(
         if (location === null) {
             return false;
         }
-
-        console.log('\nbreakpoint:', breakpointId);
-        console.log('\nplayer answer:', characterId, pctX, pctY);
-        console.log('\n\ncorrect answer (X):', location.xMin, location.xMax);
-        console.log('\n\ncorrect answer (Y):', location.yMin, location.yMax);
-
         
         return (
             location.xMin <= pctX &&

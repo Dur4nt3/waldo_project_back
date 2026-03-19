@@ -5,6 +5,7 @@ import validateSessionMiddleware from '../controllers/utilities/validateSessionM
 import {
     controllerGetSession,
     controllerGetCurrentLevel,
+    controllerGetScores,
 } from '../controllers/game/gameControllersGet';
 import {
     controllerPostGame,
@@ -53,5 +54,8 @@ gamesRouter.post(
     validateSessionMiddleware,
     controllerPostNewLevel,
 );
+
+// Get placements
+gamesRouter.get('/scores', controllerGetScores);
 
 export default gamesRouter;

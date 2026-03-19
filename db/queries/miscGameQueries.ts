@@ -68,13 +68,14 @@ export async function insertPlayer(name: string) {
 
 export async function getLeaderboardPlacement(score: number) {
     try {
-        const playersAhead = await prisma.player.count({
+        const distinctScoresAhead = await prisma.player.groupBy({
+            by: ['score'],
             where: {
                 score: { lt: score, not: null },
             },
         });
 
-        return playersAhead + 1;
+        return distinctScoresAhead.length + 1;
     } catch (error) {
         logError('Error occurred when attempting to get placement', error);
         return null;

@@ -5,8 +5,11 @@ import { error401, error500 } from '../utilities/serverResponses';
 import { getCurrentProgress } from '../../db/queries/progressQueries';
 
 import getPlayerCurrentLevel from '../utilities/getPlayerProgressData';
-import getScore from '../utilities/getScore';
-import { getLeaderboardPlacement } from '../../db/queries/miscGameQueries';
+import {
+    getLeaderboardPlacement,
+    getTop10Players,
+} from '../../db/queries/miscGameQueries';
+import formatPlacements from '../utilities/formatPlacements';
 
 export function controllerGetSession(req: Request, res: Response) {
     const session = req.gameSession;
@@ -53,5 +56,20 @@ export async function controllerGetCurrentLevel(req: Request, res: Response) {
     return res.json({
         success: true,
         progress: currentLevel,
+    });
+}
+
+export async function controllerGetScores(req: Request, res: Response) {
+    const placements = await getTop10Players();
+
+    if (placements === null) {
+        return error500(res);
+    }
+
+    const formattedPlacements = formatPlacements(placements);
+
+    return res.json({
+        success: true,
+        placements: formattedPlacements,
     });
 }
