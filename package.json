@@ -5,7 +5,8 @@
     "main": "app.ts",
     "scripts": {
         "dev": "tsx --watch app.ts",
-        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --setupFiles dotenv/config"
+        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --setupFiles dotenv/config --runInBand",
+        "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --setupFiles dotenv/config --runInBand --watch"
     },
     "repository": {
         "type": "git",
